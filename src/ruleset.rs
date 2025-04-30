@@ -9,7 +9,10 @@ use crate::{
 use std::io::Error;
 use std::mem::size_of_val;
 use std::os::unix::io::{AsRawFd, FromRawFd, OwnedFd};
+use std::sync::Arc;
+use std::sync::Mutex;
 
+use enumflags2::BitFlag;
 use pyo3::prelude::*;
 
 #[cfg(test)]
@@ -239,11 +242,24 @@ impl Default for Ruleset {
     }
 }
 
+#[pyclass]
+#[pyo3(name = "Ruleset")]
+pub struct PyRuleset(Arc<Mutex<Option<Ruleset>>>);
+
 #[pymethods]
-impl Ruleset {
+impl PyRuleset {
     #[new]
-    fn py_new() -> PyResult<Self> {
-        Ok(Self::default())
+    fn new() -> PyResult<Self> {
+        Ok(Self(Arc::new(Mutex::new(Some(Ruleset::default())))))
+    }
+
+    fn handle_fs_access(slf: PyRefMut<Self>, access: u64) -> PyResult<PyRefMut<Self>> {
+        let rs = slf.0.lock().unwrap().take().unwrap();
+        let rs = rs
+            .handle_access(AccessFs::from_bits(access).unwrap())
+            .unwrap();
+        let _ = slf.0.lock().unwrap().insert(rs);
+        Ok(slf)
     }
 }
 

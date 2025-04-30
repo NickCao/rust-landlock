@@ -93,7 +93,7 @@ pub use fs::{path_beneath_rules, AccessFs, PathBeneath, PathFd};
 pub use net::{AccessNet, NetPort};
 pub use ruleset::{
     RestrictionStatus, Rule, Ruleset, RulesetAttr, RulesetCreated, RulesetCreatedAttr,
-    RulesetStatus,
+    RulesetStatus, PyRuleset,
 };
 pub use scope::Scope;
 
