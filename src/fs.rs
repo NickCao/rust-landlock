@@ -15,7 +15,7 @@ use std::os::unix::fs::OpenOptionsExt;
 use std::os::unix::io::{AsFd, AsRawFd, BorrowedFd, OwnedFd};
 use std::path::Path;
 
-use pyo3::pyclass;
+use pyo3::prelude::*;
 
 #[cfg(test)]
 use crate::{RulesetAttr, RulesetCreatedAttr};
@@ -95,6 +95,15 @@ pub enum AccessFs {
     Truncate = uapi::LANDLOCK_ACCESS_FS_TRUNCATE as u64,
     /// Send IOCL commands to a device file.
     IoctlDev = uapi::LANDLOCK_ACCESS_FS_IOCTL_DEV as u64,
+}
+
+#[pymethods]
+impl AccessFs {
+    #[staticmethod]
+    #[pyo3(name = "from_all")]
+    fn py_from_all(abi: ABI) -> u64 {
+        (Self::from_read(abi) | Self::from_write(abi)).bits()
+    }
 }
 
 impl Access for AccessFs {
