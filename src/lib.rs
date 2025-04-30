@@ -116,6 +116,7 @@ mod net;
 mod ruleset;
 mod scope;
 mod uapi;
+mod python;
 
 // Makes sure private traits cannot be implemented outside of this crate.
 mod private {

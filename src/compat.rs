@@ -2,6 +2,8 @@
 
 use crate::{uapi, Access, CompatError};
 
+use pyo3::pyclass;
+
 #[cfg(test)]
 use std::convert::TryInto;
 #[cfg(test)]
@@ -47,6 +49,7 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 )]
 #[derive(Copy, Clone)]
 #[non_exhaustive]
+#[pyclass]
 pub enum ABI {
     /// Kernel not supporting Landlock, either because it is not built with Landlock
     /// or Landlock is not enabled at boot.
