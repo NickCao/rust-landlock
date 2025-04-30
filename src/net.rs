@@ -9,6 +9,8 @@ use crate::{
 use enumflags2::{bitflags, BitFlags};
 use std::mem::zeroed;
 
+use pyo3::pyclass;
+
 /// Network access right.
 ///
 /// Each variant of `AccessNet` is an [access right](https://www.kernel.org/doc/html/latest/userspace-api/landlock.html#access-rights)
@@ -42,6 +44,7 @@ use std::mem::zeroed;
 #[repr(u64)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[non_exhaustive]
+#[pyclass]
 pub enum AccessNet {
     /// Bind to a TCP port.
     BindTcp = uapi::LANDLOCK_ACCESS_NET_BIND_TCP as u64,

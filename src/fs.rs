@@ -15,6 +15,8 @@ use std::os::unix::fs::OpenOptionsExt;
 use std::os::unix::io::{AsFd, AsRawFd, BorrowedFd, OwnedFd};
 use std::path::Path;
 
+use pyo3::pyclass;
+
 #[cfg(test)]
 use crate::{RulesetAttr, RulesetCreatedAttr};
 #[cfg(test)]
@@ -55,6 +57,7 @@ use strum::IntoEnumIterator;
 #[repr(u64)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[non_exhaustive]
+#[pyclass]
 pub enum AccessFs {
     /// Execute a file.
     Execute = uapi::LANDLOCK_ACCESS_FS_EXECUTE as u64,
