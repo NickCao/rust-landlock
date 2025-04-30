@@ -17,8 +17,16 @@ enumflags2 = "0.7"
 libc = "0.2.133"
 thiserror = "2.0"
 
+[dependencies.pyo3]
+version = "0.24.2"
+features = ["extension-module", "abi3-py311"]
+
 [dev-dependencies]
 anyhow = "1.0"
 lazy_static = "1"
 strum = "0.26"
 strum_macros = "0.26"
+
+[lib]
+name = "landlock"
+crate-type = ["cdylib"]
