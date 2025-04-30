@@ -10,6 +10,8 @@ use std::io::Error;
 use std::mem::size_of_val;
 use std::os::unix::io::{AsRawFd, FromRawFd, OwnedFd};
 
+use pyo3::prelude::*;
+
 #[cfg(test)]
 use crate::*;
 
@@ -171,6 +173,7 @@ fn support_no_new_privs() -> bool {
 /// let status = restrict_paths(&["/usr", "/home"]).expect("failed to build the ruleset");
 /// ```
 #[cfg_attr(test, derive(Debug))]
+#[pyclass]
 pub struct Ruleset {
     pub(crate) requested_handled_fs: BitFlags<AccessFs>,
     pub(crate) requested_handled_net: BitFlags<AccessNet>,
@@ -233,6 +236,14 @@ impl Default for Ruleset {
         // enum).  It should then not be possible to give an "all-possible-handled-accesses" to the
         // Ruleset builder because this value would be relative to the running kernel.
         Compatibility::new().into()
+    }
+}
+
+#[pymethods]
+impl Ruleset {
+    #[new]
+    fn py_new() -> PyResult<Self> {
+        Ok(Self::default())
     }
 }
 
